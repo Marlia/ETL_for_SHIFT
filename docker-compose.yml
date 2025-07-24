@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: weather_db
+    restart: always
+    environment:
+      POSTGRES_DB: weather
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: I_WANT_TO_SHIFT
+    ports:
+      - "5432:5432"
+    volumes:
+      - weather_pgdata:/var/lib/postgresql/data
+
+  etl:
+    build: .
+    container_name: weather_etl
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    tty: true
+
+volumes:
+  weather_pgdata:
